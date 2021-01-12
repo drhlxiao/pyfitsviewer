@@ -429,6 +429,7 @@ class FitsViewer(QtWidgets.QMainWindow):
 
         self.file_model = QtWidgets.QFileSystemModel()
         self.ui.contents.doubleClicked.connect(self.on_data_cell_double_clicked)
+        self.ui.createTemplateButton.clicked.connect(self.create_analysis_template)
         
 
         self.ui.url.setText(str(Path.home()))
@@ -509,8 +510,32 @@ class FitsViewer(QtWidgets.QMainWindow):
         self.active_plot_window = None
 
     def on_indices_toggled(self, state):
-
         self.ui.arrayIndices.setEnabled(state)
+
+    def create_analysis_template(self):
+        index = self.ui.sections.currentIndex()
+        #data_str=str(self.ui.sections.model().index(index.row(),index.column()).data())
+        template='''import numpy\nfrom matplotlib import pyplot as plt\nfrom astropy.io import fits\nhdul = fits.open("{fname}")\nprint(hdul.info())\n'''
+        template+='print(hdul[{index}].data.names)\n'
+        template+='fig=plt.figure()\nplt.plot(hdul[{index}].data)\nplt.show()'
+        fname=self.current_file if self.current_file else ''
+        row=index.row()
+        row=0 if row<0 else row
+
+        ss=template.format(fname=fname, index=row)
+        cb = QtWidgets.QApplication.clipboard()
+        cb.clear(mode=cb.Clipboard)
+        cb.setText(ss, mode=cb.Clipboard)
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setText(
+            "A python template has been copied to the clipboard."
+        )
+        msg.setWindowTitle("Information")
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        retval = msg.exec_()
+
+
 
     def on_dir_loaded(self, directory):
 
@@ -785,7 +810,7 @@ class FitsViewer(QtWidgets.QMainWindow):
         Store settings (including layout and window geometry).
         '''
 
-        settings = QtCore.QSettings('RadioTeleskopEffelsberg', 'pyfv')
+        settings = QtCore.QSettings('pyfitsviewer', 'pyfv')
         settings.setValue(
             'splitter/splitterSizes', self.ui.splitter.saveState()
             )
@@ -803,7 +828,7 @@ class FitsViewer(QtWidgets.QMainWindow):
         Read stored settings (including layout and window geometry).
         '''
 
-        settings = QtCore.QSettings('RadioTeleskopEffelsberg', 'pyfv')
+        settings = QtCore.QSettings('pyfitsviewer', 'pyfv')
 
         self.ui.splitter.restoreState(settings.value('splitter/splitterSizes'))
         self.ui.splitter_2.restoreState(
@@ -831,9 +856,11 @@ class FitsViewer(QtWidgets.QMainWindow):
 
 
 def main():
+    import signal
     app = QtWidgets.QApplication(sys.argv)
     window = FitsViewer()
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     window.show()
-    app.exec_()
+    sys.exit(app.exec_())
 if __name__ == '__main__':
     main()

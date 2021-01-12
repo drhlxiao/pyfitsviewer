@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1088</width>
+    <width>1327</width>
     <height>828</height>
    </rect>
   </property>
@@ -277,7 +277,14 @@
               <item>
                <widget class="QCheckBox" name="allColumnCheckBox">
                 <property name="text">
-                 <string>Select all columns</string>
+                 <string>Use all indexes</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="createTemplateButton">
+                <property name="text">
+                 <string>Create template</string>
                 </property>
                </widget>
               </item>
@@ -314,7 +321,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1088</width>
+     <width>1327</width>
      <height>26</height>
     </rect>
    </property>
