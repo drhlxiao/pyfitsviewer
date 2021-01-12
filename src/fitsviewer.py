@@ -432,7 +432,7 @@ class FitsViewer(QtWidgets.QMainWindow):
         self.ui.createTemplateButton.clicked.connect(self.create_analysis_template)
         
 
-        self.ui.url.setText(str(Path.home()))
+        #self.ui.url.setText(str(Path.home()))
         #set default directory to home
 
         if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
@@ -822,6 +822,7 @@ class FitsViewer(QtWidgets.QMainWindow):
             )
         settings.setValue('pyfv/geometry', self.saveGeometry())
         settings.setValue('pyfv/windowState', self.saveState())
+        settings.setValue('pyfv/url', self.ui.url.text())
 
     def read_settings(self):
         '''
@@ -839,6 +840,7 @@ class FitsViewer(QtWidgets.QMainWindow):
             )
         self.restoreGeometry(settings.value('pyfv/geometry'))
         self.restoreState(settings.value('pyfv/windowState'))
+        self.ui.url.setText(settings.value('pyfv/url', str(Path.home()), str))
 
     def showEvent(self, se):
         '''

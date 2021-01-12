@@ -221,7 +221,7 @@ class Ui_MainWindow(object):
         self.indicesCheckbox.setText(_translate("MainWindow", "Use only array index:"))
         self.arrayIndices.setPrefix(_translate("MainWindow", "Ch: "))
         self.allColumnCheckBox.setText(_translate("MainWindow", "Use all indexes"))
-        self.createTemplateButton.setText(_translate("MainWindow", "Create template"))
+        self.createTemplateButton.setText(_translate("MainWindow", "Create py template"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionOpen.setText(_translate("MainWindow", "Open"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
