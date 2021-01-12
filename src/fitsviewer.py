@@ -681,7 +681,8 @@ class FitsViewer(QtWidgets.QMainWindow):
             if self.ui.allColumnCheckBox.isChecked():
                 data=np.transpose(np.array(data_parts))
                 for ic, col in enumerate(data.tolist()):
-                    p.plot(col, **plot_args, label=f'Ch {ic}')
+                    col_label=_get_label(selection[0].column())
+                    p.plot(col, **plot_args, label=f'{col_label}[{ic}]')
                 p.legend(loc='upper right')
                 self.active_plot_window.update_hold()
 
