@@ -31,8 +31,8 @@ API_VERSION = 2
 for name in API_NAMES:
     sip.setapi(name, API_VERSION)
 
-from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import Qt
+from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import Qt
 
 import os
 import sys
@@ -81,7 +81,7 @@ class MatplotlibCanvas(FigureCanvas):
         self.reset()
         self.setParent(parent)
         super(MatplotlibCanvas, self).setSizePolicy(
-            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
             )
         super(MatplotlibCanvas, self).updateGeometry()
 
@@ -108,7 +108,7 @@ class MatplotlibCanvas(FigureCanvas):
             )
 
 
-class PlotWindow(QtGui.QDialog):
+class PlotWindow(QtWidgets.QDialog):
 
     def __init__(self, parent=None):
 
@@ -122,7 +122,7 @@ class PlotWindow(QtGui.QDialog):
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.ui.plotContainer.addWidget(self.toolbar)
 
-        self.ui.buttonBox.button(QtGui.QDialogButtonBox.Reset).clicked.connect(
+        self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(
             self.reset
             )
         self.ui.keepPrevious.clicked.connect(
@@ -149,8 +149,9 @@ class PlotWindow(QtGui.QDialog):
         self.update_hold()
 
     def update_hold(self):
+        pass
 
-        self.canvas.axes.hold(self.ui.keepPrevious.isChecked())
+        #self.canvas.axes.hold(self.ui.keepPrevious.isChecked())
 
     def on_layout_selected(self, index):
 
@@ -374,7 +375,7 @@ class FitsDataModel(QtCore.QAbstractTableModel):
             return self.fitsdata[index.row()][index.column()]
 
 
-class DataSortFilterProxyModel(QtGui.QSortFilterProxyModel):
+class DataSortFilterProxyModel(QtCore.QSortFilterProxyModel):
 
     def __init__(self, parent=None):
 
@@ -415,7 +416,7 @@ class DataSortFilterProxyModel(QtGui.QSortFilterProxyModel):
         return False
 
 
-class FitsViewer(QtGui.QMainWindow):
+class FitsViewer(QtWidgets.QMainWindow):
 
     def __init__(self, parent=None):
 
@@ -427,7 +428,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.current_file = None
         self._do_read_settings = True
 
-        self.file_model = QtGui.QFileSystemModel()
+        self.file_model = QtWidgets.QFileSystemModel()
 
         if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
             components = sys.argv[1].split('/')
@@ -459,7 +460,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.on_file_selected
             )
 
-        self.ui.sections.setSelectionBehavior(QtGui.QTableView.SelectRows)
+        self.ui.sections.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.ui.sections.verticalHeader().setDefaultSectionSize(20)
         self.ui.sections.setShowGrid(False)
         self.ui.header.setShowGrid(False)
@@ -471,10 +472,10 @@ class FitsViewer(QtGui.QMainWindow):
         # self.ui.splitter_2.setSizes([200, 500])
         # self.ui.splitter_3.setSizes([200, 500])
 
-        menu = QtGui.QMenu()
+        menu = QtWidgets.QMenu()
 
         for action_name, action_args in PLOT_ACTIONS:
-            action = QtGui.QAction(action_name, menu)
+            action = QtWidgets.QAction(action_name, menu)
             action.setProperty('args', action_args)
             action.triggered.connect(self.on_plot_selection_triggered)
             menu.addAction(action)
@@ -516,12 +517,12 @@ class FitsViewer(QtGui.QMainWindow):
         # preselect the given file
         index = self.file_model.index(self.preselect_file)
         self.ui.files.selectionModel().select(
-            index, QtGui.QItemSelectionModel.ClearAndSelect
+            index, QtCore.QItemSelectionModel.ClearAndSelect
             )
 
     def on_browsedir_clicked(self):
 
-        directory = QtGui.QFileDialog.getExistingDirectory(
+        directory = QtWidgets.QFileDialog.getExistingDirectory(
             None, 'Select base FITS directory', self.ui.url.text()
             )
         if len(directory):
@@ -546,7 +547,7 @@ class FitsViewer(QtGui.QMainWindow):
         real_item = self.hduList_proxy_model.mapToSource(item)
         hdu_entry = self.hduList_model.hdu_entry_for_index(real_item)
 
-        self.hdu_header_proxy_model = QtGui.QSortFilterProxyModel()
+        self.hdu_header_proxy_model = QtCore.QSortFilterProxyModel()
         self.hdu_header_proxy_model.setSourceModel(FitsHeaderModel(hdu_entry))
         self.hdu_header_proxy_model.setFilterKeyColumn(0)
         self.ui.header.setModel(self.hdu_header_proxy_model)
@@ -564,9 +565,9 @@ class FitsViewer(QtGui.QMainWindow):
     def on_plot_selection_triggered(self):
 
         if (
-                not QtGui.QApplication.mouseButtons() & Qt.RightButton and
-                not isinstance(self.sender(), QtGui.QPushButton) and
-                not isinstance(self.sender(), QtGui.QAction)
+                not QtWidgets.QApplication.mouseButtons() & Qt.RightButton and
+                not isinstance(self.sender(), QtWidgets.QPushButton) and
+                not isinstance(self.sender(), QtWidgets.QAction)
                 ):
 
             return
@@ -673,7 +674,7 @@ class FitsViewer(QtGui.QMainWindow):
                     # temporarily enable hold so all curves are painted
                     # this is inside the loop so the first call clears the
                     # plot if desired
-                    self.active_plot_window.canvas.axes.hold(True)
+                    #self.active_plot_window.canvas.axes.hold(True)
                 self.active_plot_window.update_hold()
             else:
                 p.plot(np.array(data_parts), **plot_args)
@@ -732,7 +733,7 @@ class FitsViewer(QtGui.QMainWindow):
                 )
             return
 
-        self.hduList_proxy_model = QtGui.QSortFilterProxyModel()
+        self.hduList_proxy_model = QtCore.QSortFilterProxyModel()
         self.hduList_model = FitsHeaderListModel(hdulist)
         self.hduList_proxy_model.setSourceModel(self.hduList_model)
         self.on_hduList_filter_changed(self.ui.filterSections.text())
@@ -808,7 +809,7 @@ class FitsViewer(QtGui.QMainWindow):
 
 if __name__ == '__main__':
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = FitsViewer()
     window.show()
     app.exec_()
