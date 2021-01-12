@@ -3,6 +3,7 @@
 
 # * Copyright (c) 2014 Sven Brauch <mail@svenbrauch.de>                       *
 # * Copyright (c) 2016 Benjamin Winkel <>                                     *
+# * Copyright (c) 2021 Hualin Xiao <hualin.xiao@fhnw.ch>                                     *
 # *                                                                           *
 # * This program is free software; you can redistribute it and/or             *
 # * modify it under the terms of the GNU General Public License as            *
@@ -23,6 +24,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import sip
+from pathlib import Path
 API_NAMES = [
     'QDate', 'QDateTime', 'QString', 'QTextStream',
     'QTime', 'QUrl', 'QVariant'
@@ -36,12 +38,8 @@ from PyQt5.QtCore import Qt
 
 import os
 import sys
-if sys.version_info >= (3, 0):
-    from mainwindow_form3 import Ui_MainWindow
-    from plotwindow_form3 import Ui_Dialog
-else:
-    from mainwindow_form import Ui_MainWindow
-    from plotwindow_form import Ui_Dialog
+from mainwindow_form3 import Ui_MainWindow
+from plotwindow_form3 import Ui_Dialog
 
 from matplotlib.backends.backend_qt4agg import (
     FigureCanvasQTAgg as FigureCanvas,
@@ -415,7 +413,6 @@ class DataSortFilterProxyModel(QtCore.QSortFilterProxyModel):
 
         return False
 
-
 class FitsViewer(QtWidgets.QMainWindow):
 
     def __init__(self, parent=None):
@@ -429,6 +426,10 @@ class FitsViewer(QtWidgets.QMainWindow):
         self._do_read_settings = True
 
         self.file_model = QtWidgets.QFileSystemModel()
+        
+
+        self.ui.url.setText(str(Path.home()))
+        #set default directory to home
 
         if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
             components = sys.argv[1].split('/')
@@ -807,9 +808,11 @@ class FitsViewer(QtWidgets.QMainWindow):
             self._do_read_settings = False
 
 
-if __name__ == '__main__':
 
+def main():
     app = QtWidgets.QApplication(sys.argv)
     window = FitsViewer()
     window.show()
     app.exec_()
+if __name__ == '__main__':
+    main()
