@@ -25,6 +25,7 @@ from __future__ import unicode_literals
 
 import sip
 from pathlib import Path
+from functools import partial
 API_NAMES = [
     'QDate', 'QDateTime', 'QString', 'QTextStream',
     'QTime', 'QUrl', 'QVariant'
@@ -32,14 +33,15 @@ API_NAMES = [
 API_VERSION = 2
 for name in API_NAMES:
     sip.setapi(name, API_VERSION)
+import os
+import sys
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
 
-import os
-import sys
-from mainwindow_form3 import Ui_MainWindow
-from plotwindow_form3 import Ui_Dialog
+from src.mainwindow_form3 import Ui_MainWindow
+from src.plotwindow_form3 import Ui_Dialog
+from src import text_viewer
 
 from matplotlib.backends.backend_qt4agg import (
     FigureCanvasQTAgg as FigureCanvas,
@@ -426,6 +428,7 @@ class FitsViewer(QtWidgets.QMainWindow):
         self._do_read_settings = True
 
         self.file_model = QtWidgets.QFileSystemModel()
+        self.ui.contents.doubleClicked.connect(self.on_data_cell_double_clicked)
         
 
         self.ui.url.setText(str(Path.home()))
@@ -563,6 +566,16 @@ class FitsViewer(QtWidgets.QMainWindow):
         self.ui.contents.verticalHeader().setDefaultSectionSize(20)
         self.change_data_filter()
 
+    def on_data_cell_double_clicked(self):
+        diag = QtWidgets.QDialog()
+        diag_ui = text_viewer.Ui_Dialog()
+        diag_ui.setupUi(diag)
+        index = self.ui.contents.currentIndex()
+        data_str=str(self.ui.contents.model().index(index.row(),index.column()).data())
+        diag_ui.setText(data_str)
+        diag.exec_()
+
+
     def on_plot_selection_triggered(self):
 
         if (
@@ -608,14 +621,15 @@ class FitsViewer(QtWidgets.QMainWindow):
                 index, RAW_DATA_ROLE
                 )
 
-            if type(data) == np.ndarray and array_fields != '*':
-
-                try:
-                    return data[array_fields]
-                except ValueError:
-                    self.ui.statusbar.showMessage(
-                        'out-of-range value in array index field', 10000
-                        )
+            if type(data) == np.ndarray:
+                if array_fields != '*':
+                    try:
+                        return data[array_fields]
+                    except ValueError or IndexError:
+                        self.ui.statusbar.showMessage(
+                            'out-of-range value in array index field', 10000
+                            )
+            
 
             return data
 
@@ -664,11 +678,17 @@ class FitsViewer(QtWidgets.QMainWindow):
                 for index in selection
                 ))
             p.set_ylabel(label)
+            if self.ui.allColumnCheckBox.isChecked():
+                data=np.transpose(np.array(data_parts))
+                for ic, col in enumerate(data.tolist()):
+                    p.plot(col, **plot_args, label=f'Ch {ic}')
+                p.legend(loc='upper right')
+                self.active_plot_window.update_hold()
 
-            if False not in [
+            elif all([
                     isinstance(part, np.ndarray)
                     for part in data_parts
-                    ]:
+                    ]):
                 # all items are arrays -> plot as curves
                 for item in data_parts:
                     p.plot(item, **plot_args)
