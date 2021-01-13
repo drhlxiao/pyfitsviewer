@@ -117,8 +117,8 @@
        <property name="title">
         <string>Section contents</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
          <widget class="QSplitter" name="splitter_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -180,7 +180,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="layoutWidget">
+          <widget class="QWidget" name="layoutWidget_2">
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -231,6 +231,9 @@
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QTableView" name="contents"/>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -303,9 +306,6 @@
               </item>
              </layout>
             </item>
-            <item>
-             <widget class="QTableView" name="contents"/>
-            </item>
            </layout>
           </widget>
          </widget>
@@ -329,12 +329,37 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionOpen_2"/>
     <addaction name="actionReset"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuHelp_2">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+   <addaction name="menuHelp_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
@@ -356,6 +381,24 @@
     <string>Ctrl+R</string>
    </property>
   </action>
+  <action name="actionOpen_2">
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+  </action>
+  <action name="actionData_request">
+   <property name="icon">
+    <iconset theme="SP_FileDialogContentsView"/>
+   </property>
+   <property name="text">
+    <string>STIX Data Query</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -372,134 +415,6 @@
     <hint type="destinationlabel">
      <x>399</x>
      <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clearDataFilter</sender>
-   <signal>clicked()</signal>
-   <receiver>filterData</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>874</x>
-     <y>361</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>787</x>
-     <y>360</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clearHeaderFilter</sender>
-   <signal>clicked()</signal>
-   <receiver>filterHeader</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>874</x>
-     <y>97</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>643</x>
-     <y>83</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clearFileFilter</sender>
-   <signal>clicked()</signal>
-   <receiver>filterFiles</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>239</x>
-     <y>118</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>109</x>
-     <y>117</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clearSectionsFilter</sender>
-   <signal>clicked()</signal>
-   <receiver>filterSections</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>137</x>
-     <y>379</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionReset</sender>
-   <signal>triggered()</signal>
-   <receiver>filterFiles</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>109</x>
-     <y>117</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionReset</sender>
-   <signal>triggered()</signal>
-   <receiver>filterSections</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>109</x>
-     <y>385</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionReset</sender>
-   <signal>triggered()</signal>
-   <receiver>filterHeader</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>687</x>
-     <y>83</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionReset</sender>
-   <signal>triggered()</signal>
-   <receiver>filterData</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>717</x>
-     <y>347</y>
     </hint>
    </hints>
   </connection>

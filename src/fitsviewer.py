@@ -35,6 +35,7 @@ for name in API_NAMES:
     sip.setapi(name, API_VERSION)
 import os
 import sys
+import requests
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
@@ -430,6 +431,7 @@ class FitsViewer(QtWidgets.QMainWindow):
         self.file_model = QtWidgets.QFileSystemModel()
         self.ui.contents.doubleClicked.connect(self.on_data_cell_double_clicked)
         self.ui.createTemplateButton.clicked.connect(self.create_analysis_template)
+        #self.ui.queryButton.clicked.connect(self.on_query_clicked)
         
 
         #self.ui.url.setText(str(Path.home()))
@@ -799,6 +801,14 @@ class FitsViewer(QtWidgets.QMainWindow):
         index = self.file_model.setRootPath(self.ui.url.text())
         self.ui.files.setRootIndex(index)
         self.setWindowTitle('pyfv: {}'.format(self.ui.url.text()))
+
+    #def on_query_clicked(self):
+    #    dataType=self.ui.dataTypeInput.currentText()
+    #    dataLevel=self.ui.dataLevelInput.currentText()
+    #    startUTC=self.ui.startDateTimeEdit.dateTime().toString('yyyy-MM-ddThh:mm:ss')
+    #    endUTC=self.ui.endDateTimeEdit.dateTime().toString('yyyy-MM-ddThh:mm:ss')
+    #    r = requests.post('https://httpbin.org/post', data = {'key':'value'}).json()
+
 
     def closeEvent(self, event):
 
