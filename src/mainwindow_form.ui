@@ -260,7 +260,7 @@
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable to use only one index when the selected data field contains an array.&lt;/p&gt;&lt;p&gt;Disable to leave array untouched before passing it to the plotter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="text">
-                 <string>Use only array index:</string>
+                 <string>Select only array index:</string>
                 </property>
                 <property name="checkable">
                  <bool>true</bool>
@@ -280,14 +280,7 @@
               <item>
                <widget class="QCheckBox" name="allColumnCheckBox">
                 <property name="text">
-                 <string>Use all indexes</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="createTemplateButton">
-                <property name="text">
-                 <string>Create py template</string>
+                 <string>Select all indices</string>
                 </property>
                </widget>
               </item>
@@ -337,6 +330,7 @@
     <property name="title">
      <string>Tools</string>
     </property>
+    <addaction name="actionCreatePyTemplate"/>
    </widget>
    <widget class="QMenu" name="menuHelp_2">
     <property name="title">
@@ -388,7 +382,8 @@
   </action>
   <action name="actionData_request">
    <property name="icon">
-    <iconset theme="SP_FileDialogContentsView"/>
+    <iconset theme="SP_FileDialogContentsView">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>STIX Data Query</string>
@@ -397,6 +392,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionCreatePyTemplate">
+   <property name="text">
+    <string>&amp;Create python template</string>
    </property>
   </action>
  </widget>

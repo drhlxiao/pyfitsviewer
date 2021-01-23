@@ -18,11 +18,6 @@
 # * You should have received a copy of the GNU General Public License         *
 # * along with this program.  If not, see <http://www.gnu.org/licenses/>.     *
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import sip
 from pathlib import Path
 from functools import partial
@@ -40,8 +35,8 @@ import requests
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
 
-from src.mainwindow_form3 import Ui_MainWindow
-from src.plotwindow_form3 import Ui_Dialog
+from src.mainwindow_form import Ui_MainWindow
+from src.plotwindow_form import Ui_Dialog
 from src import text_viewer
 
 from matplotlib.backends.backend_qt4agg import (
@@ -430,7 +425,7 @@ class FitsViewer(QtWidgets.QMainWindow):
 
         self.file_model = QtWidgets.QFileSystemModel()
         self.ui.contents.doubleClicked.connect(self.on_data_cell_double_clicked)
-        self.ui.createTemplateButton.clicked.connect(self.create_analysis_template)
+        self.ui.actionCreatePyTemplate.triggered.connect(self.create_analysis_template)
         #self.ui.queryButton.clicked.connect(self.on_query_clicked)
         
 
